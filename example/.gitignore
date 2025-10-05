@@ -1,0 +1,22 @@
+node_modules
+
+# Android/IntelliJ
+#
+android/**/build/
+**/android/build
+android/.idea
+.idea/*
+!.idea/inspectionProfiles
+.idea/inspectionProfiles/*
+!.idea/inspectionProfiles/Sbermarket_Profile.xml
+!.idea/inspectionProfiles/profiles_settings.xml
+.gradle
+
+local.properties
+*.iml
+*.hprof
+.cxx/
+
+# Ruby / CocoaPods
+**/Pods/
+/vendor/bundle/

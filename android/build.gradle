@@ -1,0 +1,132 @@
+import java.util.regex.Matcher
+import java.util.regex.Pattern
+import groovy.json.JsonSlurper
+
+buildscript {
+  ext.getExtOrDefault = {name ->
+    return rootProject.ext.has(name) ? rootProject.ext.get(name) : project.properties['TypedConfig_' + name]
+  }
+
+  repositories {
+    google()
+    mavenCentral()
+  }
+
+  dependencies {
+    classpath "com.android.tools.build:gradle:8.7.2"
+    // noinspection DifferentKotlinGradleVersion
+    classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${getExtOrDefault('kotlinVersion')}"
+  }
+}
+
+
+apply plugin: "com.android.library"
+apply plugin: "kotlin-android"
+
+apply plugin: "com.facebook.react"
+
+def getExtOrIntegerDefault(name) {
+  return rootProject.ext.has(name) ? rootProject.ext.get(name) : (project.properties["TypedConfig_" + name]).toInteger()
+}
+
+react {
+  libraryName = "TypedConfig"
+  codegenJavaPackageName = "com.typedconfig"
+}
+
+def getCurrentFlavor() {
+  Gradle gradle = getGradle()
+
+  // match optional modules followed by the task
+  // (?:.*:)* is a non-capturing group to skip any :foo:bar: if they exist
+  // *[a-z]+([A-Za-z]+) will capture the flavor part of the task name onward (e.g., assembleRelease --> Release)
+  def pattern = Pattern.compile("(?:.*:)*[a-z]+([A-Z][A-Za-z0-9]+)")
+  def flavor = ""
+
+  gradle.getStartParameter().getTaskNames().any { name ->
+    Matcher matcher = pattern.matcher(name)
+    if (matcher.find()) {
+      flavor = matcher.group(1).toLowerCase()
+      return true
+    }
+  }
+
+  return flavor
+}
+
+
+android {
+  namespace "com.typedconfig"
+
+  compileSdkVersion getExtOrIntegerDefault("compileSdkVersion")
+
+  defaultConfig {
+
+    minSdkVersion getExtOrIntegerDefault("minSdkVersion")
+    targetSdkVersion getExtOrIntegerDefault("targetSdkVersion")
+
+    def currentFlavor = getCurrentFlavor()
+
+    def stdout = new StringBuilder()
+    def stderr = new StringBuilder()
+
+    def prj = project(":react-native-typed-config")
+    def process = "node ${prj.projectDir}/../scripts/generateAndroidConfig.js ${currentFlavor} ${rootProject.projectDir}".execute()
+
+    process.waitForProcessOutput(stdout, stderr)
+
+    def result = stdout.toString()
+    def err = stderr.toString()
+
+
+    if (result != "") {
+      print("result: ${result}")
+      def parsed = new JsonSlurper().parseText(result)
+
+      parsed.each { item ->
+        buildConfigField(item.type, item.key, item.value)
+      }
+    }
+  }
+
+
+  buildFeatures {
+    buildConfig true
+  }
+
+  buildTypes {
+    release {
+      minifyEnabled false
+    }
+  }
+
+  lintOptions {
+    disable "GradleCompatible"
+  }
+
+  compileOptions {
+    sourceCompatibility JavaVersion.VERSION_1_8
+    targetCompatibility JavaVersion.VERSION_1_8
+  }
+
+  sourceSets {
+    main {
+      java.srcDirs += [
+        "generated/java",
+        "generated/jni"
+      ]
+    }
+  }
+}
+
+repositories {
+  mavenCentral()
+  google()
+}
+
+def kotlin_version = getExtOrDefault("kotlinVersion")
+
+dependencies {
+  implementation "com.facebook.react:react-android"
+  implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+}

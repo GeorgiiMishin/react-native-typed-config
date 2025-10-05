@@ -1,0 +1,1 @@
+#define DOT_ENV @{ @"platform": @"ios",@"flavor": @"debug",@"pidor": @YES, };

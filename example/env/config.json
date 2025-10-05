@@ -1,0 +1,9 @@
+{
+  "entryPoint": "makeEnv.js",
+
+  "defaultEnvFile": ".env.json",
+  "envFiles": {
+    "debug": ".env.debug.json",
+    "release": ".env.release.json"
+  }
+}
