@@ -2341,7 +2341,7 @@ PODS:
     - React-utils (= 0.81.1)
     - SocketRocket
   - SocketRocket (0.7.1)
-  - TypedConfig (0.0.0):
+  - TypedConfig (1.0.0):
     - boost
     - DoubleConversion
     - fast_float
@@ -2674,7 +2674,7 @@ SPEC CHECKSUMS:
   ReactCodegen: 4d203eddf6f977caa324640a20f92e70408d648b
   ReactCommon: ce5d4226dfaf9d5dacbef57b4528819e39d3a120
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
-  TypedConfig: 17ab963ff61e6f102d2af625dd6deb5ec319b567
+  TypedConfig: 444e237e9807db9a6ebcd1283d86a803ef740835
   Yoga: 11c9686a21e2cd82a094a723649d9f4507200fb0
 
 PODFILE CHECKSUM: e631c75790567e40c8be7147746bc83031072e90
