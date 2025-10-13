@@ -15,19 +15,11 @@ Pod::Spec.new do |s|
 
   s.source_files = "ios/**/*.{h,m,mm,cpp}"
   s.private_header_files = "ios/**/*.h"
-
-  config_mapping = defined?($typed_config_mapping) ? $typed_config_mapping : {
-    # "Debug" => '.env.debug.json',
-    # "Release" => '.env.production.json'
-  }
-
   s.script_phases = [
     {
       :name => 'Generate Env config',
       :script => <<-SCRIPT,
 cd "${PODS_TARGET_SRCROOT}"
-
-export CONFIG_MAPPING='#{config_mapping.to_json}'
 
 node "./scripts/generateIosConfig.js" "${CONFIGURATION}"
 SCRIPT
