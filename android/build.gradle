@@ -78,6 +78,13 @@ android {
     def result = stdout.toString()
     def err = stderr.toString()
 
+    def exitValue = process.exitValue()
+
+    if (exitValue != 0) {
+      throw new GradleException("Script execution failed with exit code $exitValue. Error: $err")
+    }
+
+    if (err)
 
     if (result != "") {
       print("result: ${result}")
