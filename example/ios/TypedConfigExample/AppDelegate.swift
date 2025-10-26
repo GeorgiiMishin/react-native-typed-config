@@ -27,7 +27,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
       withModuleName: "TypedConfigExample",
       in: window,
       initialProperties: ["storeType": "ios"],
-      launchOptions: launchOptions,
+      launchOptions: launchOptions
     )
 
     return true
