@@ -35,7 +35,7 @@ async function readFromEntryPoint(platform, flavor, projectDir, entryPoint) {
 async function extractConfig(platform, flavor, projectDir) {
   if (!platform || !flavor || !projectDir) {
     throw new Error(
-      "Invalid arguments. Usage: node extractConfig.js <platform> <flavor> <projectDir>"
+      `Invalid arguments. Usage: node extractConfig.js <platform> <flavor> <projectDir>. Platform: ${platform}, Flavor: ${flavor}, ProjectDir: ${projectDir}`
     );
   }
 

@@ -67,6 +67,10 @@ android {
 
     def currentFlavor = getCurrentFlavor()
 
+    if (currentFlavor == null || currentFlavor == "") {
+      return
+    }
+
     def stdout = new StringBuilder()
     def stderr = new StringBuilder()
 
@@ -83,8 +87,6 @@ android {
     if (exitValue != 0) {
       throw new GradleException("Script execution failed with exit code $exitValue. Error: $err")
     }
-
-    if (err)
 
     if (result != "") {
       print("result: ${result}")
